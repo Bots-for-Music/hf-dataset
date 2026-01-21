@@ -4,8 +4,8 @@ A paired audio and MIDI dataset of Norwegian folk music for training audio-to-MI
 
 ## Dataset Summary
 
-- **Total pairs:** 118 audio-MIDI pairs
-- **Unique songs:** 38
+- **Total pairs:** 119 audio-MIDI pairs
+- **Unique songs:** 39
 - **Total size:** ~970 MB
 - **Audio format:** WAV
 - **MIDI format:** Standard MIDI (.mid)
@@ -115,18 +115,19 @@ Single recordings without emotional variations.
 | 11 | StoreDekken |
 | 12 | Vrengja |
 
-### Archival Recordings (6 pairs)
+### Archival Recordings (7 pairs)
 
 Historical recordings from Norwegian folk music archives.
 
 | # | Song Name |
 |---|-----------|
-| 1 | 00106-Furholt Otto-Fiskaren |
-| 2 | 00108-Furholt Otto-Sordølen |
-| 3 | 00365-Berge Per Olsson-Salmastubben |
-| 4 | 00379-Berge Per Olsson-Skarsnuten |
-| 5 | 01267-Ørpen Truls Gunnarson-Springar fra Krødsherad |
-| 6 | 01309-Ørpen Truls Gunnarson-Springar |
+| 1 | 00058-Dahle Johannes Knutson-Tussebrureferda på Vossevangen |
+| 2 | 00106-Furholt Otto-Fiskaren |
+| 3 | 00108-Furholt Otto-Sordølen |
+| 4 | 00365-Berge Per Olsson-Salmastubben |
+| 5 | 00379-Berge Per Olsson-Skarsnuten |
+| 6 | 01267-Ørpen Truls Gunnarson-Springar fra Krødsherad |
+| 7 | 01309-Ørpen Truls Gunnarson-Springar |
 
 ## Manifest Columns
 
