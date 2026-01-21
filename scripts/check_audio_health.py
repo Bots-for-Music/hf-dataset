@@ -119,8 +119,8 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
 
         if non_silent_ratio < MIN_NON_SILENT_RATIO:
             result["issues"].append(
-                f"Only {non_silent_ratio*100:.1f}% of samples are non-silent "
-                f"(minimum: {MIN_NON_SILENT_RATIO*100:.0f}%)"
+                f"Only {non_silent_ratio * 100:.1f}% of samples are non-silent "
+                f"(minimum: {MIN_NON_SILENT_RATIO * 100:.0f}%)"
             )
 
     # Check: clipping
@@ -132,7 +132,7 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
 
     if clipping_ratio > CLIPPING_THRESHOLD:
         result["issues"].append(
-            f"Possible clipping detected: {clipping_ratio*100:.2f}% of samples at max amplitude"
+            f"Possible clipping detected: {clipping_ratio * 100:.2f}% of samples at max amplitude"
         )
 
     # RMS level

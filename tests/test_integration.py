@@ -96,9 +96,9 @@ class TestFileExistence:
         for row in manifest_rows:
             audio_stem = Path(row["audio_relpath"]).stem
             midi_stem = Path(row["midi_relpath"]).stem
-            assert (
-                audio_stem == midi_stem
-            ), f"Mismatched stems: audio={audio_stem}, midi={midi_stem}"
+            assert audio_stem == midi_stem, (
+                f"Mismatched stems: audio={audio_stem}, midi={midi_stem}"
+            )
 
 
 @pytest.mark.integration
@@ -117,9 +117,9 @@ class TestValidationScript:
             capture_output=True,
             text=True,
         )
-        assert (
-            result.returncode == 0
-        ), f"Validation failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+        assert result.returncode == 0, (
+            f"Validation failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+        )
 
 
 @pytest.mark.integration
@@ -173,7 +173,7 @@ class TestEmotionalVariations:
 
         for song_name, emotions in song_emotions.items():
             assert emotions == self.EMOTIONS, (
-                f"Song {song_name} missing emotions. " f"Has: {emotions}, Expected: {self.EMOTIONS}"
+                f"Song {song_name} missing emotions. Has: {emotions}, Expected: {self.EMOTIONS}"
             )
 
     def test_correct_songs_marked_with_variations(
@@ -209,9 +209,9 @@ class TestArchivalRecordings:
         for row in manifest_rows:
             # Archival files start with 5-digit numbers
             if row["song_name"].startswith(("00", "01")):
-                assert (
-                    row["notes"] == "archival"
-                ), f"Archival recording {row['song_name']} should have notes='archival'"
+                assert row["notes"] == "archival", (
+                    f"Archival recording {row['song_name']} should have notes='archival'"
+                )
 
     def test_archival_recordings_no_emotion(
         self,
@@ -224,6 +224,6 @@ class TestArchivalRecordings:
 
         for row in manifest_rows:
             if row["notes"] == "archival":
-                assert (
-                    row["emotion"] == ""
-                ), f"Archival recording {row['song_name']} should have no emotion"
+                assert row["emotion"] == "", (
+                    f"Archival recording {row['song_name']} should have no emotion"
+                )
