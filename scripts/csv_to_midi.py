@@ -98,6 +98,60 @@ def process_directory(csv_dir: Path, midi_dir: Path, force: bool = False) -> dic
     return results
 
 
+def process_alternatives(
+    csv_alt_dir: Path, midi_alt_dir: Path, force: bool = False
+) -> dict[str, int]:
+    """Convert alternative transcription CSVs to MIDI.
+
+    Alternative transcriptions are stored in subdirectories named after the song:
+        csv_alt/{song_name}/version1.csv
+        csv_alt/{song_name}/version2.csv
+        ->
+        midi_alt/{song_name}/version1.mid
+        midi_alt/{song_name}/version2.mid
+
+    Args:
+        csv_alt_dir: Directory containing song subdirectories with CSV files
+        midi_alt_dir: Directory for output MIDI files (mirrored structure)
+        force: Overwrite existing MIDI files
+
+    Returns:
+        Dictionary mapping relative paths to note counts
+    """
+    results: dict[str, int] = {}
+
+    if not csv_alt_dir.exists():
+        return results
+
+    # Walk through song subdirectories
+    for song_dir in sorted(csv_alt_dir.iterdir()):
+        if not song_dir.is_dir():
+            continue
+
+        song_name = song_dir.name
+        midi_song_dir = midi_alt_dir / song_name
+        midi_song_dir.mkdir(parents=True, exist_ok=True)
+
+        # Convert each CSV in the song directory
+        for csv_path in sorted(song_dir.glob("*.csv")):
+            midi_path = midi_song_dir / csv_path.with_suffix(".mid").name
+            rel_path = f"{song_name}/{csv_path.name}"
+
+            if midi_path.exists() and not force:
+                print(f"Skipping {rel_path} (MIDI exists, use --force to overwrite)")
+                continue
+
+            try:
+                note_count = csv_to_midi(csv_path, midi_path)
+                results[rel_path] = note_count
+                print(f"Converted {rel_path} -> {midi_path.name} ({note_count} notes)")
+            except Exception as e:
+                print(f"Error converting {rel_path}: {e}")
+                results[rel_path] = -1
+
+    return results
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Convert CSV note files to MIDI format",
@@ -110,6 +164,9 @@ Examples:
     # Convert all CSVs in a directory
     python csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/
 
+    # Convert alternative transcriptions
+    python csv_to_midi.py --alternatives data/raw/csv_alt/ --midi-dir data/raw/midi_alt/
+
     # Force overwrite existing files
     python csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/ --force
         """,
@@ -117,7 +174,13 @@ Examples:
     parser.add_argument(
         "input",
         type=Path,
+        nargs="?",
         help="Input CSV file or directory containing CSV files",
+    )
+    parser.add_argument(
+        "--alternatives",
+        type=Path,
+        help="Process alternative transcriptions directory (csv_alt structure)",
     )
     parser.add_argument(
         "-o",
@@ -143,6 +206,22 @@ Examples:
     )
 
     args = parser.parse_args()
+
+    # Handle alternative transcriptions mode
+    if args.alternatives:
+        if args.midi_dir is None:
+            print("Error: --midi-dir required for alternatives conversion")
+            sys.exit(1)
+
+        results = process_alternatives(args.alternatives, args.midi_dir, args.force)
+        successful = sum(1 for v in results.values() if v >= 0)
+        print(f"\nConverted {successful}/{len(results)} alternative transcriptions")
+        sys.exit(0)
+
+    # Handle normal input mode
+    if args.input is None:
+        print("Error: input path required (or use --alternatives)")
+        sys.exit(1)
 
     if args.input.is_file():
         # Single file conversion

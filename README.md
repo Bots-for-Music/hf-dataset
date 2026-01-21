@@ -43,9 +43,17 @@ cat reports/validate.json | python -m json.tool
 hf-dataset/
 ├── data/
 │   ├── raw/
-│   │   ├── audio/    # 119 .wav files
-│   │   ├── midi/     # 119 .mid files
-│   │   └── csv/      # Ground truth CSV files (high-precision pitch)
+│   │   ├── audio/      # 119 .wav files
+│   │   ├── midi/       # 119 .mid files (primary transcriptions)
+│   │   ├── csv/        # Ground truth CSV files (high-precision pitch)
+│   │   ├── csv_alt/    # Alternative transcriptions
+│   │   │   └── {song_name}/
+│   │   │       ├── roughpitch.csv
+│   │   │       └── other_version.csv
+│   │   └── midi_alt/   # Alternative MIDI (from csv_alt)
+│   │       └── {song_name}/
+│   │           ├── roughpitch.mid
+│   │           └── other_version.mid
 │   └── manifests/
 │       └── manifest.csv
 ├── scripts/
@@ -57,6 +65,7 @@ hf-dataset/
 ├── tests/
 │   ├── test_build_manifest.py
 │   ├── test_validate_dataset.py
+│   ├── test_csv_to_midi.py
 │   └── test_integration.py
 ├── reports/
 │   ├── validate.json
@@ -277,6 +286,30 @@ csv_notes = load_csv_notes('data/raw/csv/song.csv')
 print(f"CSV pitch: {csv_notes[0]['pitch']:.2f}")  # e.g., 78.36
 print(f"MIDI pitch: {round(csv_notes[0]['pitch'])}")  # e.g., 78
 ```
+
+### Alternative Transcriptions
+
+Some songs have multiple transcription versions (e.g., different pitch detection algorithms). These are stored separately from the primary transcriptions:
+
+```
+data/raw/csv_alt/{song_name}/version.csv  →  data/raw/midi_alt/{song_name}/version.mid
+```
+
+Alternative transcriptions are **not** included in the manifest (no audio pairing). They serve as reference for comparing transcription methods.
+
+```bash
+# Convert alternative transcriptions
+python scripts/csv_to_midi.py --alternatives data/raw/csv_alt/ --midi-dir data/raw/midi_alt/
+
+# Or via DVC pipeline
+dvc repro convert_csv_alt
+```
+
+**Current alternative transcriptions:**
+
+| Song | Version | Description |
+|------|---------|-------------|
+| 00058-Dahle Johannes Knutson-Tussebrureferda på Vossevangen | roughpitch.csv | Raw pitch detection (before autotuning) |
 
 ## Python Usage Examples
 

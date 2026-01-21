@@ -11,7 +11,7 @@ import pytest
 # Add scripts directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
-from csv_to_midi import csv_to_midi, process_directory
+from csv_to_midi import csv_to_midi, process_alternatives, process_directory
 
 
 @pytest.fixture
@@ -253,3 +253,103 @@ class TestProcessDirectory:
 
         assert len(results) == 0
         assert midi_dir.exists()
+
+
+class TestProcessAlternatives:
+    """Tests for process_alternatives function."""
+
+    def test_convert_alternatives(self, tmp_path: Path) -> None:
+        """Test converting alternative transcriptions in song subdirectories."""
+        csv_alt_dir = tmp_path / "csv_alt"
+        midi_alt_dir = tmp_path / "midi_alt"
+
+        # Create song directory with multiple versions
+        song_dir = csv_alt_dir / "MySong"
+        song_dir.mkdir(parents=True)
+
+        for version in ["roughpitch", "autotuned"]:
+            csv_path = song_dir / f"{version}.csv"
+            with open(csv_path, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["onset", "offset", "onpitch"])
+                writer.writerow([0.0, 1.0, 60.0])
+
+        results = process_alternatives(csv_alt_dir, midi_alt_dir)
+
+        assert len(results) == 2
+        assert results["MySong/roughpitch.csv"] == 1
+        assert results["MySong/autotuned.csv"] == 1
+        assert (midi_alt_dir / "MySong" / "roughpitch.mid").exists()
+        assert (midi_alt_dir / "MySong" / "autotuned.mid").exists()
+
+    def test_multiple_songs(self, tmp_path: Path) -> None:
+        """Test converting alternatives for multiple songs."""
+        csv_alt_dir = tmp_path / "csv_alt"
+        midi_alt_dir = tmp_path / "midi_alt"
+
+        # Create two song directories
+        for song in ["Song1", "Song2"]:
+            song_dir = csv_alt_dir / song
+            song_dir.mkdir(parents=True)
+            csv_path = song_dir / "version1.csv"
+            with open(csv_path, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["onset", "offset", "onpitch"])
+                writer.writerow([0.0, 1.0, 60.0])
+
+        results = process_alternatives(csv_alt_dir, midi_alt_dir)
+
+        assert len(results) == 2
+        assert (midi_alt_dir / "Song1" / "version1.mid").exists()
+        assert (midi_alt_dir / "Song2" / "version1.mid").exists()
+
+    def test_skip_existing_midi(self, tmp_path: Path) -> None:
+        """Test that existing alternative MIDIs are not overwritten."""
+        csv_alt_dir = tmp_path / "csv_alt"
+        midi_alt_dir = tmp_path / "midi_alt"
+
+        # Create song directory with CSV
+        song_dir = csv_alt_dir / "MySong"
+        song_dir.mkdir(parents=True)
+        csv_path = song_dir / "version.csv"
+        with open(csv_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["onset", "offset", "onpitch"])
+            writer.writerow([0.0, 1.0, 60.0])
+
+        # Create existing MIDI
+        midi_song_dir = midi_alt_dir / "MySong"
+        midi_song_dir.mkdir(parents=True)
+        midi_path = midi_song_dir / "version.mid"
+        midi_path.write_text("original")
+
+        results = process_alternatives(csv_alt_dir, midi_alt_dir, force=False)
+
+        assert len(results) == 0
+        assert midi_path.read_text() == "original"
+
+    def test_nonexistent_directory(self, tmp_path: Path) -> None:
+        """Test that nonexistent csv_alt directory returns empty results."""
+        csv_alt_dir = tmp_path / "nonexistent"
+        midi_alt_dir = tmp_path / "midi_alt"
+
+        results = process_alternatives(csv_alt_dir, midi_alt_dir)
+
+        assert len(results) == 0
+
+    def test_ignores_files_in_root(self, tmp_path: Path) -> None:
+        """Test that CSV files directly in csv_alt (not in subdirs) are ignored."""
+        csv_alt_dir = tmp_path / "csv_alt"
+        midi_alt_dir = tmp_path / "midi_alt"
+        csv_alt_dir.mkdir()
+
+        # Create CSV directly in csv_alt (should be ignored)
+        csv_path = csv_alt_dir / "orphan.csv"
+        with open(csv_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["onset", "offset", "onpitch"])
+            writer.writerow([0.0, 1.0, 60.0])
+
+        results = process_alternatives(csv_alt_dir, midi_alt_dir)
+
+        assert len(results) == 0

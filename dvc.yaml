@@ -5,6 +5,12 @@ stages:
       - data/raw/csv
       - scripts/csv_to_midi.py
 
+  convert_csv_alt:
+    cmd: python3 scripts/csv_to_midi.py --alternatives data/raw/csv_alt/ --midi-dir data/raw/midi_alt/
+    deps:
+      - data/raw/csv_alt
+      - scripts/csv_to_midi.py
+
   build_manifest:
     cmd: python3 scripts/build_manifest.py
     deps:
