@@ -1,0 +1,19 @@
+stages:
+  build_manifest:
+    cmd: python3 scripts/build_manifest.py
+    deps:
+      - data/raw/audio
+      - data/raw/midi
+      - scripts/build_manifest.py
+    outs:
+      - data/manifests/manifest.csv
+  validate:
+    cmd: python3 scripts/validate_dataset.py
+    deps:
+      - data/manifests/manifest.csv
+      - data/raw/audio
+      - data/raw/midi
+      - scripts/validate_dataset.py
+    metrics:
+      - reports/validate.json:
+          cache: false

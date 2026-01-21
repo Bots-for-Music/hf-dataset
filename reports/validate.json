@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "total_pairs": 118,
+  "unique_songs": 38,
+  "songs_with_variations": 20,
+  "songs_without_variations": 18,
+  "missing_files": [],
+  "checksum_mismatches": [],
+  "duplicate_ids": [],
+  "timestamp": "2026-01-21T18:20:54.057905Z"
+}

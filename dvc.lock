@@ -1,0 +1,50 @@
+schema: '2.0'
+stages:
+  build_manifest:
+    cmd: python3 scripts/build_manifest.py
+    deps:
+    - path: data/raw/audio
+      hash: md5
+      md5: d0795257d889bbf320ef9b8eb1ca3317.dir
+      size: 1015740366
+      nfiles: 118
+    - path: data/raw/midi
+      hash: md5
+      md5: 7009f9b68740965a8abc270ab29c61db.dir
+      size: 549874
+      nfiles: 118
+    - path: scripts/build_manifest.py
+      hash: md5
+      md5: b3ec29f0846b705f65abfb182934c192
+      size: 5306
+    outs:
+    - path: data/manifests/manifest.csv
+      hash: md5
+      md5: 5a900cb69d9f6ed00acebcaa74af6766
+      size: 37831
+  validate:
+    cmd: python3 scripts/validate_dataset.py
+    deps:
+    - path: data/manifests/manifest.csv
+      hash: md5
+      md5: 5a900cb69d9f6ed00acebcaa74af6766
+      size: 37831
+    - path: data/raw/audio
+      hash: md5
+      md5: d0795257d889bbf320ef9b8eb1ca3317.dir
+      size: 1015740366
+      nfiles: 118
+    - path: data/raw/midi
+      hash: md5
+      md5: 7009f9b68740965a8abc270ab29c61db.dir
+      size: 549874
+      nfiles: 118
+    - path: scripts/validate_dataset.py
+      hash: md5
+      md5: d97e3ecb6543591e8ee953719e3d559d
+      size: 4174
+    outs:
+    - path: reports/validate.json
+      hash: md5
+      md5: 03979a7a84d19b9f578df6799da8a477
+      size: 252
