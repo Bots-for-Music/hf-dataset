@@ -88,9 +88,9 @@ jobs:
 
       - name: Configure DVC
         run: |
-          dvc remote modify gdrive --local gdrive_use_service_account true
+          dvc remote modify company-gdrive --local gdrive_use_service_account true
           echo '${{ secrets.GDRIVE_CREDENTIALS }}' > /tmp/gdrive-credentials.json
-          dvc remote modify gdrive --local gdrive_service_account_json_file_path /tmp/gdrive-credentials.json
+          dvc remote modify company-gdrive --local gdrive_service_account_json_file_path /tmp/gdrive-credentials.json
         env:
           GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
 
