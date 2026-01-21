@@ -67,7 +67,7 @@ jobs:
   full-validation:
     name: Full Dataset Validation
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_FULL_VALIDATION == 'true'
     needs: lint-and-test
 
     steps:
@@ -91,12 +91,9 @@ jobs:
           dvc remote modify company-gdrive --local gdrive_use_service_account true
           echo '${{ secrets.GDRIVE_CREDENTIALS }}' > /tmp/gdrive-credentials.json
           dvc remote modify company-gdrive --local gdrive_service_account_json_file_path /tmp/gdrive-credentials.json
-        env:
-          GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
 
       - name: Pull data from DVC
         run: dvc pull
-        continue-on-error: true
 
       - name: Run validation script
         run: |
