@@ -7,6 +7,7 @@ stages:
       - scripts/build_manifest.py
     outs:
       - data/manifests/manifest.csv
+
   validate:
     cmd: python3 scripts/validate_dataset.py
     deps:
@@ -16,4 +17,22 @@ stages:
       - scripts/validate_dataset.py
     metrics:
       - reports/validate.json:
+          cache: false
+
+  check_midi:
+    cmd: python3 scripts/check_midi_health.py data/raw/midi/ -o reports/midi_health.json
+    deps:
+      - data/raw/midi
+      - scripts/check_midi_health.py
+    metrics:
+      - reports/midi_health.json:
+          cache: false
+
+  check_audio:
+    cmd: python3 scripts/check_audio_health.py data/raw/audio/ -o reports/audio_health.json
+    deps:
+      - data/raw/audio
+      - scripts/check_audio_health.py
+    metrics:
+      - reports/audio_health.json:
           cache: false
