@@ -67,21 +67,66 @@ hf-dataset/
 └── CHANGELOG.md
 ```
 
-## File Categories
+## Song List
 
 ### Songs with Emotional Variations (20 songs, 100 pairs)
 
-These songs have 5 variants each: `angry`, `happy`, `sad`, `tender`, and `original`:
+Each song has 5 variants: `angry`, `happy`, `sad`, `tender`, and `original`.
 
-Fuglesangen, Godvaersdagen, GroHolto, Haslebuskane, Havbrusen, IvarJorde, Klunkelatten, Kongelatten, Langaakern, LattenSomBedOmNoko, Perigarden, Silkjegulen, Solmoy, Strandaspringar, Tjednbalen, Toingen, Valdresspringar, Vossarull, SigneUladalen, Spretten
+| # | Song Name |
+|---|-----------|
+| 1 | Fuglesangen |
+| 2 | Godvaersdagen |
+| 3 | GroHolto |
+| 4 | Haslebuskane |
+| 5 | Havbrusen |
+| 6 | IvarJorde |
+| 7 | Klunkelatten |
+| 8 | Kongelatten |
+| 9 | Langaakern |
+| 10 | LattenSomBedOmNoko |
+| 11 | Perigarden |
+| 12 | SigneUladalen |
+| 13 | Silkjegulen |
+| 14 | Solmoy |
+| 15 | Spretten |
+| 16 | Strandaspringar |
+| 17 | Tjednbalen |
+| 18 | Toingen |
+| 19 | Valdresspringar |
+| 20 | Vossarull |
 
-### Songs without Emotional Variations (18 pairs)
+### Processed Recordings (12 pairs)
 
-**Processed recordings (12):**
-Baggen, Baustadtoppen, Den_eldste, Goffala_tten, Kaatereiar, Leinen, Mandagsmorgon, Myregutspringar, Peisestugu, Rande-Ambjor2, StoreDekken, Vrengja
+Single recordings without emotional variations.
 
-**Archival recordings (6):**
+| # | Song Name |
+|---|-----------|
+| 1 | Baggen |
+| 2 | Baustadtoppen |
+| 3 | Den_eldste |
+| 4 | Goffala_tten |
+| 5 | Kaatereiar |
+| 6 | Leinen |
+| 7 | Mandagsmorgon |
+| 8 | Myregutspringar |
+| 9 | Peisestugu |
+| 10 | Rande-Ambjor2 |
+| 11 | StoreDekken |
+| 12 | Vrengja |
+
+### Archival Recordings (6 pairs)
+
 Historical recordings from Norwegian folk music archives.
+
+| # | Song Name |
+|---|-----------|
+| 1 | 00106-Furholt Otto-Fiskaren |
+| 2 | 00108-Furholt Otto-Sordølen |
+| 3 | 00365-Berge Per Olsson-Salmastubben |
+| 4 | 00379-Berge Per Olsson-Skarsnuten |
+| 5 | 01267-Ørpen Truls Gunnarson-Springar fra Krødsherad |
+| 6 | 01309-Ørpen Truls Gunnarson-Springar |
 
 ## Manifest Columns
 
