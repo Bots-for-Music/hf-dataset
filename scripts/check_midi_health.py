@@ -197,7 +197,8 @@ def main() -> int:
     print(f"Valid files:        {valid_count}")
     print(f"Invalid files:      {invalid_count}")
     print(f"Files with warnings:{warning_count}")
-    print(f"Status:             {report['status'].upper()}")
+    status = str(report["status"])
+    print(f"Status:             {status.upper()}")
 
     if invalid_count > 0:
         print("\nInvalid files:")

@@ -105,7 +105,7 @@ def extract_emotion(filename: str) -> Optional[str]:
     return None
 
 
-def main():
+def main() -> None:
     root = Path(__file__).parent.parent
     audio_dir = root / "data" / "raw" / "audio"
     midi_dir = root / "data" / "raw" / "midi"

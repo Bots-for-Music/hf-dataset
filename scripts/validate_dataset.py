@@ -6,6 +6,7 @@ import hashlib
 import json
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 
 def sha256_file(filepath: Path) -> str:
@@ -17,13 +18,13 @@ def sha256_file(filepath: Path) -> str:
     return h.hexdigest()
 
 
-def main():
+def main() -> int:
     root = Path(__file__).parent.parent
     manifest_path = root / "data" / "manifests" / "manifest.csv"
     report_path = root / "reports" / "validate.json"
 
     # Initialize report
-    report = {
+    report: dict[str, Any] = {
         "status": "pass",
         "total_pairs": 0,
         "unique_songs": 0,

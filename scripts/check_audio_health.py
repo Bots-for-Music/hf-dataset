@@ -104,8 +104,8 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
 
     # Check: silence analysis
     abs_data = np.abs(mono_data)
-    max_amplitude = np.max(abs_data)
-    result["metadata"]["max_amplitude"] = round(float(max_amplitude), 4)
+    max_amplitude: float = float(np.max(abs_data))
+    result["metadata"]["max_amplitude"] = round(max_amplitude, 4)
 
     if max_amplitude < 1e-6:
         result["valid"] = False
@@ -113,7 +113,7 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
     else:
         # Count non-silent samples
         threshold = max_amplitude * SILENCE_THRESHOLD
-        non_silent_samples = np.sum(abs_data > threshold)
+        non_silent_samples: int = int(np.sum(abs_data > threshold))
         non_silent_ratio = non_silent_samples / len(mono_data)
         result["metadata"]["non_silent_ratio"] = round(float(non_silent_ratio), 4)
 
@@ -126,7 +126,7 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
     # Check: clipping
     # For float32 audio, clipping is at -1.0 and 1.0
     clipping_threshold_value = 0.9999
-    clipped_samples = np.sum(abs_data >= clipping_threshold_value)
+    clipped_samples: int = int(np.sum(abs_data >= clipping_threshold_value))
     clipping_ratio = clipped_samples / len(mono_data)
     result["metadata"]["clipping_ratio"] = round(float(clipping_ratio), 6)
 
@@ -153,6 +153,8 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
 
 
 def main() -> int:
+    global MIN_DURATION_SEC, MAX_DURATION_SEC
+
     parser = argparse.ArgumentParser(description="Check audio files for health issues")
     parser.add_argument(
         "path",
@@ -168,14 +170,14 @@ def main() -> int:
     parser.add_argument(
         "--min-duration",
         type=float,
-        default=MIN_DURATION_SEC,
-        help=f"Minimum duration in seconds (default: {MIN_DURATION_SEC})",
+        default=5.0,
+        help="Minimum duration in seconds (default: 5.0)",
     )
     parser.add_argument(
         "--max-duration",
         type=float,
-        default=MAX_DURATION_SEC,
-        help=f"Maximum duration in seconds (default: {MAX_DURATION_SEC})",
+        default=300.0,
+        help="Maximum duration in seconds (default: 300.0)",
     )
     parser.add_argument(
         "--strict",
@@ -185,7 +187,6 @@ def main() -> int:
     args = parser.parse_args()
 
     # Update global thresholds
-    global MIN_DURATION_SEC, MAX_DURATION_SEC
     MIN_DURATION_SEC = args.min_duration
     MAX_DURATION_SEC = args.max_duration
 
@@ -240,7 +241,8 @@ def main() -> int:
     print(f"Valid files:        {valid_count}")
     print(f"Invalid files:      {invalid_count}")
     print(f"Files with warnings:{warning_count}")
-    print(f"Status:             {report['status'].upper()}")
+    status = str(report["status"])
+    print(f"Status:             {status.upper()}")
 
     if invalid_count > 0:
         print("\nInvalid files:")
