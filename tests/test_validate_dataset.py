@@ -4,8 +4,6 @@ import csv
 import hashlib
 from pathlib import Path
 
-import pytest
-
 # Import functions from validate_dataset
 from validate_dataset import sha256_file
 
@@ -79,7 +77,7 @@ class TestManifestSchema:
 
     def test_manifest_has_required_columns(self, sample_manifest_path: Path) -> None:
         """Test that manifest has all required columns."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             columns = reader.fieldnames or []
 
@@ -88,7 +86,7 @@ class TestManifestSchema:
 
     def test_manifest_column_order(self, sample_manifest_path: Path) -> None:
         """Test that manifest columns are in expected order."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             columns = reader.fieldnames or []
 
@@ -96,7 +94,7 @@ class TestManifestSchema:
 
     def test_id_is_sha256_format(self, sample_manifest_path: Path) -> None:
         """Test that ID column contains valid SHA256 hex strings."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # In sample data, IDs are simplified; in real data they're SHA256
@@ -105,21 +103,21 @@ class TestManifestSchema:
 
     def test_audio_ext_is_wav(self, sample_manifest_path: Path) -> None:
         """Test that audio_ext is always .wav."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["audio_ext"] == ".wav"
 
     def test_midi_ext_is_mid(self, sample_manifest_path: Path) -> None:
         """Test that midi_ext is always .mid."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["midi_ext"] == ".mid"
 
     def test_has_emotional_variations_is_boolean(self, sample_manifest_path: Path) -> None:
         """Test that has_emotional_variations is True or False."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["has_emotional_variations"] in ("True", "False")
@@ -127,7 +125,7 @@ class TestManifestSchema:
     def test_emotion_values(self, sample_manifest_path: Path) -> None:
         """Test that emotion contains valid values or is empty."""
         valid_emotions = {"angry", "happy", "sad", "tender", "original", ""}
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["emotion"] in valid_emotions, f"Invalid emotion: {row['emotion']}"
@@ -135,7 +133,7 @@ class TestManifestSchema:
     def test_notes_values(self, sample_manifest_path: Path) -> None:
         """Test that notes contains valid values or is empty."""
         valid_notes = {"archival", "processed", ""}
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["notes"] in valid_notes, f"Invalid notes: {row['notes']}"
@@ -146,7 +144,7 @@ class TestManifestDataIntegrity:
 
     def test_no_duplicate_ids(self, sample_manifest_path: Path) -> None:
         """Test that there are no duplicate IDs."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             ids = [row["id"] for row in reader]
 
@@ -154,7 +152,7 @@ class TestManifestDataIntegrity:
 
     def test_audio_relpath_format(self, sample_manifest_path: Path) -> None:
         """Test that audio_relpath has correct format."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["audio_relpath"].startswith("data/raw/audio/")
@@ -162,7 +160,7 @@ class TestManifestDataIntegrity:
 
     def test_midi_relpath_format(self, sample_manifest_path: Path) -> None:
         """Test that midi_relpath has correct format."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 assert row["midi_relpath"].startswith("data/raw/midi/")
@@ -170,7 +168,7 @@ class TestManifestDataIntegrity:
 
     def test_sha256_format(self, sample_manifest_path: Path) -> None:
         """Test that SHA256 columns have valid format (simplified in sample)."""
-        with open(sample_manifest_path, "r", encoding="utf-8") as f:
+        with open(sample_manifest_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # Just check non-empty for sample data

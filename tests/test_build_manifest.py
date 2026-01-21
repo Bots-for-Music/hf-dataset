@@ -1,7 +1,5 @@
 """Unit tests for build_manifest.py functions."""
 
-import pytest
-
 # Import functions from build_manifest
 from build_manifest import extract_emotion, extract_song_name, sha256_string
 
@@ -27,14 +25,19 @@ class TestExtractSongName:
         name = "Baggen_happy_torr_02-Dec-2024_09-04-07_02-Dec-2024_09-37-47_02-Dec-2024_13-40-54.mid_cleaned.wav"
         assert extract_song_name(name) == "Baggen"
 
-        name = "Baustadtoppen_original_torr_05-Dec-2024_13-12-57_05-Dec-2024_15-03-52.mid_cleaned.wav"
+        name = (
+            "Baustadtoppen_original_torr_05-Dec-2024_13-12-57_05-Dec-2024_15-03-52.mid_cleaned.wav"
+        )
         assert extract_song_name(name) == "Baustadtoppen"
 
     def test_archival_with_number_prefix(self) -> None:
         """Test extraction from archival filenames with number prefix."""
         assert extract_song_name("00106-Furholt Otto-Fiskaren.wav") == "00106-Furholt Otto-Fiskaren"
         assert extract_song_name("00108-Furholt Otto-Sordølen.wav") == "00108-Furholt Otto-Sordølen"
-        assert extract_song_name("01267-Ørpen Truls Gunnarson-Springar fra Krødsherad.wav") == "01267-Ørpen Truls Gunnarson-Springar fra Krødsherad"
+        assert (
+            extract_song_name("01267-Ørpen Truls Gunnarson-Springar fra Krødsherad.wav")
+            == "01267-Ørpen Truls Gunnarson-Springar fra Krødsherad"
+        )
 
     def test_cleaned_suffix(self) -> None:
         """Test extraction from filenames with _cleaned suffix."""

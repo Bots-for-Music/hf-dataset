@@ -153,16 +153,15 @@ def check_audio_file(filepath: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Check audio files for health issues"
-    )
+    parser = argparse.ArgumentParser(description="Check audio files for health issues")
     parser.add_argument(
         "path",
         type=Path,
         help="Path to audio file or directory containing audio files",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=Path,
         help="Output JSON report file",
     )
@@ -235,7 +234,7 @@ def main() -> int:
         print(f"Report written to {args.output}")
 
     # Print summary
-    print(f"\nAudio Health Check Summary")
+    print("\nAudio Health Check Summary")
     print(f"{'=' * 40}")
     print(f"Total files:        {len(results)}")
     print(f"Valid files:        {valid_count}")
@@ -244,7 +243,7 @@ def main() -> int:
     print(f"Status:             {report['status'].upper()}")
 
     if invalid_count > 0:
-        print(f"\nInvalid files:")
+        print("\nInvalid files:")
         for r in results:
             if not r["valid"]:
                 print(f"  - {r['path']}")
@@ -252,7 +251,7 @@ def main() -> int:
                     print(f"      {issue}")
 
     if warning_count > 0 and invalid_count == 0:
-        print(f"\nFiles with warnings:")
+        print("\nFiles with warnings:")
         for r in results:
             if r["valid"] and r["issues"]:
                 print(f"  - {r['path']}")

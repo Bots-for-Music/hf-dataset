@@ -105,13 +105,9 @@ def check_midi_file(filepath: Path) -> dict[str, Any]:
 
     # Check: reasonable pitch range
     if min_pitch < MIN_PITCH:
-        result["issues"].append(
-            f"Pitch {min_pitch} is below extended range (min: {MIN_PITCH})"
-        )
+        result["issues"].append(f"Pitch {min_pitch} is below extended range (min: {MIN_PITCH})")
     if max_pitch > MAX_PITCH:
-        result["issues"].append(
-            f"Pitch {max_pitch} is above extended range (max: {MAX_PITCH})"
-        )
+        result["issues"].append(f"Pitch {max_pitch} is above extended range (max: {MAX_PITCH})")
 
     # Check: reasonable duration
     if duration_sec < MIN_DURATION_SEC:
@@ -131,16 +127,15 @@ def check_midi_file(filepath: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Check MIDI files for health issues"
-    )
+    parser = argparse.ArgumentParser(description="Check MIDI files for health issues")
     parser.add_argument(
         "path",
         type=Path,
         help="Path to MIDI file or directory containing MIDI files",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=Path,
         help="Output JSON report file",
     )
@@ -196,7 +191,7 @@ def main() -> int:
         print(f"Report written to {args.output}")
 
     # Print summary
-    print(f"\nMIDI Health Check Summary")
+    print("\nMIDI Health Check Summary")
     print(f"{'=' * 40}")
     print(f"Total files:        {len(results)}")
     print(f"Valid files:        {valid_count}")
@@ -205,7 +200,7 @@ def main() -> int:
     print(f"Status:             {report['status'].upper()}")
 
     if invalid_count > 0:
-        print(f"\nInvalid files:")
+        print("\nInvalid files:")
         for r in results:
             if not r["valid"]:
                 print(f"  - {r['path']}")
@@ -213,7 +208,7 @@ def main() -> int:
                     print(f"      {issue}")
 
     if warning_count > 0 and invalid_count == 0:
-        print(f"\nFiles with warnings:")
+        print("\nFiles with warnings:")
         for r in results:
             if r["valid"] and r["issues"]:
                 print(f"  - {r['path']}")

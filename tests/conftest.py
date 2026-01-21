@@ -58,7 +58,7 @@ def manifest_rows(manifest_path: Path) -> list[dict[str, str]]:
     """Load manifest rows if available."""
     if not manifest_path.exists():
         pytest.skip("Manifest not available")
-    with open(manifest_path, "r", encoding="utf-8") as f:
+    with open(manifest_path, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         return list(reader)
 
