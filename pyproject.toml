@@ -31,6 +31,7 @@ dependencies = [
     "mido>=1.2.10",
     "soundfile>=0.12.0",
     "numpy>=1.20.0",
+    "pretty_midi>=0.2.10",
 ]
 
 [project.optional-dependencies]

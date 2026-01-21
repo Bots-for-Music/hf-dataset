@@ -9,6 +9,7 @@ A paired audio and MIDI dataset of Norwegian folk music for training audio-to-MI
 - **Total size:** ~970 MB
 - **Audio format:** WAV
 - **MIDI format:** Standard MIDI (.mid)
+- **CSV ground truth:** High-precision pitch data (where available)
 
 ## Quick Start
 
@@ -43,14 +44,16 @@ hf-dataset/
 ├── data/
 │   ├── raw/
 │   │   ├── audio/    # 119 .wav files
-│   │   └── midi/     # 119 .mid files
+│   │   ├── midi/     # 119 .mid files
+│   │   └── csv/      # Ground truth CSV files (high-precision pitch)
 │   └── manifests/
 │       └── manifest.csv
 ├── scripts/
 │   ├── build_manifest.py
 │   ├── validate_dataset.py
 │   ├── check_midi_health.py
-│   └── check_audio_health.py
+│   ├── check_audio_health.py
+│   └── csv_to_midi.py
 ├── tests/
 │   ├── test_build_manifest.py
 │   ├── test_validate_dataset.py
@@ -209,6 +212,72 @@ All 119 audio-MIDI pairs in the dataset (sorted alphabetically):
 | emotion | Emotion tag if present (angry, happy, sad, tender, original) |
 | notes | `archival`, `processed`, or empty |
 
+## CSV Ground Truth Files
+
+The MIDI files in this dataset are generated from CSV files containing high-precision pitch data. Since MIDI only supports integer pitches (0-127), the original CSV files are preserved in `data/raw/csv/` as ground truth for research purposes.
+
+### CSV Format
+
+| Column | Description |
+|--------|-------------|
+| onset | Note start time in seconds |
+| offset | Note end time in seconds |
+| onpitch | Pitch at note onset (float, e.g., 78.36) |
+| offpitch | Pitch at note offset |
+| essential | Essential note flag |
+| bar | Bar number |
+| upmeter | Upper meter position |
+| lowmeter | Lower meter position |
+| offmeter | Offset meter position |
+| notetype | Note type indicator |
+| alignidx | Alignment index |
+| file1idx | File 1 index |
+| file2idx | File 2 index |
+| metralign | Metrical alignment |
+| previous | Previous note index |
+| next | Next note index |
+
+### Why CSV Matters
+
+MIDI pitches are integers, so a pitch of `78.36` becomes `78` in MIDI. For research requiring sub-semitone accuracy (microtonal analysis, pitch drift studies, etc.), use the original CSV files.
+
+### Converting CSV to MIDI
+
+```bash
+# Convert a single file
+python scripts/csv_to_midi.py input.csv -o output.mid
+
+# Convert all CSVs in directory
+python scripts/csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/
+
+# Auto-convert via DVC pipeline
+dvc repro convert_csv
+```
+
+### Loading CSV Data
+
+```python
+import csv
+
+def load_csv_notes(csv_path):
+    """Load notes from CSV with full precision."""
+    notes = []
+    with open(csv_path, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            notes.append({
+                'onset': float(row['onset']),
+                'offset': float(row['offset']),
+                'pitch': float(row['onpitch']),  # Full precision!
+            })
+    return notes
+
+# Example: compare CSV vs MIDI pitch
+csv_notes = load_csv_notes('data/raw/csv/song.csv')
+print(f"CSV pitch: {csv_notes[0]['pitch']:.2f}")  # e.g., 78.36
+print(f"MIDI pitch: {round(csv_notes[0]['pitch'])}")  # e.g., 78
+```
+
 ## Python Usage Examples
 
 ### Loading the Manifest
@@ -290,18 +359,47 @@ print(f"Test: {len(test_rows)} pairs from {len(test_songs)} songs")
 
 ## How to Add a New Song
 
-1. **Prepare files**: Ensure WAV and MIDI files have matching base names (e.g., `MySong_happy.wav` and `MySong_happy.mid`)
+### Option A: Adding with CSV Ground Truth (Recommended)
+
+If you have the original CSV file with high-precision pitch data:
+
+1. **Prepare files**: Ensure WAV and CSV files have matching base names (e.g., `MySong.wav` and `MySong.csv`)
 
 2. **Copy files to data directories**:
    ```bash
-   cp MySong_happy.wav data/raw/audio/
-   cp MySong_happy.mid data/raw/midi/
+   cp MySong.wav data/raw/audio/
+   cp MySong.csv data/raw/csv/
+   ```
+
+3. **Run the pipeline** (auto-converts CSV to MIDI):
+   ```bash
+   dvc repro
+   ```
+
+4. **Track with DVC and commit**:
+   ```bash
+   dvc add data/raw
+   git add data/raw.dvc data/manifests/manifest.csv
+   git commit -m "Add MySong"
+   dvc push && git push
+   ```
+
+### Option B: Adding MIDI Directly
+
+If you only have MIDI (no CSV):
+
+1. **Prepare files**: Ensure WAV and MIDI files have matching base names (e.g., `MySong.wav` and `MySong.mid`)
+
+2. **Copy files to data directories**:
+   ```bash
+   cp MySong.wav data/raw/audio/
+   cp MySong.mid data/raw/midi/
    ```
 
 3. **Run health checks on new files**:
    ```bash
-   python scripts/check_audio_health.py data/raw/audio/MySong_happy.wav
-   python scripts/check_midi_health.py data/raw/midi/MySong_happy.mid
+   python scripts/check_audio_health.py data/raw/audio/MySong.wav
+   python scripts/check_midi_health.py data/raw/midi/MySong.mid
    ```
 
 4. **Rebuild manifest**:

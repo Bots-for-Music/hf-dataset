@@ -1,9 +1,16 @@
 stages:
+  convert_csv:
+    cmd: python3 scripts/csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/ --force
+    deps:
+      - data/raw/csv
+      - scripts/csv_to_midi.py
+
   build_manifest:
     cmd: python3 scripts/build_manifest.py
     deps:
       - data/raw/audio
       - data/raw/midi
+      - data/raw/csv
       - scripts/build_manifest.py
     outs:
       - data/manifests/manifest.csv
