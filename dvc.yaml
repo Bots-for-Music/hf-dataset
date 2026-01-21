@@ -1,6 +1,6 @@
 stages:
   convert_csv:
-    cmd: python3 scripts/csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/ --force
+    cmd: python3 scripts/csv_to_midi.py data/raw/csv/ --midi-dir data/raw/midi/
     deps:
       - data/raw/csv
       - scripts/csv_to_midi.py

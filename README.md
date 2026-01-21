@@ -359,70 +359,44 @@ print(f"Test: {len(test_rows)} pairs from {len(test_songs)} songs")
 
 ## How to Add a New Song
 
-### Option A: Adding with CSV Ground Truth (Recommended)
+The dataset supports three input combinations:
 
-If you have the original CSV file with high-precision pitch data:
+| Input Files | Behavior |
+|-------------|----------|
+| audio + csv | CSV auto-converts to MIDI |
+| audio + midi | MIDI used directly |
+| audio + midi + csv | MIDI used, CSV stored as reference (no overwrite) |
 
-1. **Prepare files**: Ensure WAV and CSV files have matching base names (e.g., `MySong.wav` and `MySong.csv`)
+### Steps
 
-2. **Copy files to data directories**:
+1. **Copy files to data directories** (use matching base names):
    ```bash
+   # Always required
    cp MySong.wav data/raw/audio/
+
+   # Add CSV if you have high-precision ground truth
    cp MySong.csv data/raw/csv/
+
+   # Add MIDI if you have it (or let CSV auto-convert)
+   cp MySong.mid data/raw/midi/
    ```
 
-3. **Run the pipeline** (auto-converts CSV to MIDI):
+2. **Run the pipeline**:
    ```bash
    dvc repro
    ```
+   This will:
+   - Convert any CSV files to MIDI (skips if MIDI already exists)
+   - Rebuild the manifest
+   - Validate the dataset
+   - Run health checks
 
-4. **Track with DVC and commit**:
+3. **Track and push**:
    ```bash
    dvc add data/raw
    git add data/raw.dvc data/manifests/manifest.csv
    git commit -m "Add MySong"
    dvc push && git push
-   ```
-
-### Option B: Adding MIDI Directly
-
-If you only have MIDI (no CSV):
-
-1. **Prepare files**: Ensure WAV and MIDI files have matching base names (e.g., `MySong.wav` and `MySong.mid`)
-
-2. **Copy files to data directories**:
-   ```bash
-   cp MySong.wav data/raw/audio/
-   cp MySong.mid data/raw/midi/
-   ```
-
-3. **Run health checks on new files**:
-   ```bash
-   python scripts/check_audio_health.py data/raw/audio/MySong.wav
-   python scripts/check_midi_health.py data/raw/midi/MySong.mid
-   ```
-
-4. **Rebuild manifest**:
-   ```bash
-   dvc repro build_manifest
-   ```
-
-5. **Validate dataset**:
-   ```bash
-   dvc repro validate
-   ```
-
-6. **Track with DVC**:
-   ```bash
-   dvc add data/raw
-   ```
-
-7. **Commit and push**:
-   ```bash
-   git add data/raw.dvc data/manifests/manifest.csv
-   git commit -m "Add MySong_happy"
-   dvc push
-   git push
    ```
 
 ## Running the DVC Pipeline
