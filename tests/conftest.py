@@ -1,5 +1,7 @@
 """Pytest configuration and fixtures for hf-dataset tests."""
 
+from __future__ import annotations
+
 import csv
 import sys
 import tempfile
