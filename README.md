@@ -488,19 +488,20 @@ CC-BY-4.0
 
 ## Contributors
 
-- [Lars Monstad](https://github.com/LarsMonstad) - University of Oslo
 - [Olivier Lartillot](https://github.com/olivierlar) - University of Oslo
+- [Lars Monstad](https://github.com/LarsMonstad) - University of Oslo
 
 ## Citation
 
 If you use this dataset, please cite:
 
 ```bibtex
-@article{lartillot2022dataset,
-  title={A Dataset of Norwegian Hardanger Fiddle Recordings with Precise Annotation of Note and Beat Onsets},
-  author={Lartillot, Olivier and Johansson, Mats Sigvard and Elowsson, Anders and Monstad, Lars L{\o}berg and Cyvin, Mattias},
-  journal={Transactions of the International Society for Music Information Retrieval},
-  year={2022},
-  doi={10.5334/tismir.139}
+@dataset{lartillot2025hf2,
+  title={HF2: Hardanger Fiddle Dataset},
+  author={Lartillot, Olivier and Monstad, Lars},
+  year={2025},
+  publisher={Hugging Face},
+  url={https://huggingface.co/datasets/Bots4M/HF2-Hardanger-fiddle-dataset},
+  institution={University of Oslo, RITMO Centre for Interdisciplinary Studies in Rhythm, Time and Motion}
 }
 ```
