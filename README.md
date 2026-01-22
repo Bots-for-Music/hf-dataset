@@ -1,20 +1,3 @@
----
-license: cc-by-4.0
-task_categories:
-  - automatic-speech-recognition
-  - audio-classification
-language:
-  - "no"
-tags:
-  - music
-  - transcription
-  - folk-music
-  - hardanger-fiddle
-  - audio-midi
-size_categories:
-  - n<1K
----
-
 # Norwegian Folk Music Audio-MIDI Dataset
 
 > A project from the [RITMO Centre for Interdisciplinary Studies in Rhythm, Time and Motion](https://www.uio.no/ritmo/english/), University of Oslo
