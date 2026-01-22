@@ -1,19 +1,6 @@
----
-license: cc-by-4.0
-language:
-  - "no"
-tags:
-  - automatic-music-transcription
-  - audio-to-midi
-  - hardanger-fiddle
-  - norwegian-folk-music
-size_categories:
-  - n<1K
----
-
 # HF2: Hardanger Fiddle Dataset
 
-> A project from the [RITMO Centre for Interdisciplinary Studies in Rhythm, Time and Motion](https://www.uio.no/ritmo/english/), University of Oslo
+> A dataset from the University of Oslo
 
 A paired audio and MIDI dataset of Norwegian folk music for training audio-to-MIDI transcription models.
 
@@ -502,6 +489,6 @@ If you use this dataset, please cite:
   year={2025},
   publisher={Hugging Face},
   url={https://huggingface.co/datasets/Bots4M/HF2-Hardanger-fiddle-dataset},
-  institution={University of Oslo, RITMO Centre for Interdisciplinary Studies in Rhythm, Time and Motion}
+  institution={University of Oslo}
 }
 ```
