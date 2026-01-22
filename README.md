@@ -1,4 +1,4 @@
-# Norwegian Folk Music Audio-MIDI Dataset
+# HF2: Hardanger Fiddle Dataset
 
 > A project from the [RITMO Centre for Interdisciplinary Studies in Rhythm, Time and Motion](https://www.uio.no/ritmo/english/), University of Oslo
 
