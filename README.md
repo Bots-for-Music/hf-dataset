@@ -8,6 +8,7 @@ A paired audio and MIDI dataset of Norwegian folk music for training audio-to-MI
 
 - **Total pairs:** 119 audio-MIDI pairs
 - **Unique songs:** 39
+- **Total annotated notes:** 90,325
 - **Total size:** ~970 MB
 - **Audio format:** WAV
 - **MIDI format:** Standard MIDI (.mid)
