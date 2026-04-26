@@ -32,7 +32,8 @@ This dataset extends the original HF1 dataset and uses the same transcription me
 
 **Total: 39 unique songs, 119 audio-MIDI pairs**
 
-See [docs/FILELIST.md](docs/FILELIST.md) for the complete file list.
+- [docs/SONGS.md](docs/SONGS.md) — full song list with durations, note counts, recording dates, and category breakdown
+- [docs/FILELIST.md](docs/FILELIST.md) — plain audio/MIDI filename pairs
 
 ## Download Options
 
